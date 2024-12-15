@@ -63,22 +63,24 @@ def load_data_from_file(filename):
         return json.load(file)
     
 def identify_change(old_parts, new_parts):
-    if old_parts != new_parts:
-        pass
+    changes = []
+    for part in new_parts:
+        if part not in old_parts:
+            changes.append(part)
+    return changes
 
 
-if __name__ == 'main':
-    if not os.path.isfile(FILE_NAME):
-        parts = get_parts_data()
-        store_data_in_file(parts, FILE_NAME)
-    else:
-        new_parts = get_parts_data()
-        old_parts = load_data_from_file(FILE_NAME)
-        changes = identify_change(old_parts, new_parts)
-        if changes:
-            pass
-            # Do this if changes are found between the old and new file
-        
+if not os.path.isfile(FILE_NAME):
+    parts = get_parts_data()
+    store_data_in_file(parts, FILE_NAME)
+else:
+    new_parts = get_parts_data()
+    old_parts = load_data_from_file(FILE_NAME)
+    changes = identify_change(old_parts, new_parts)
+    if changes:
+        store_data_in_file(new_parts, FILE_NAME)
+        # Do this if changes are found between the old and new file
+    
 # Use only when file is not formatted correctly
 """
 with open('page_data_formatted.html', 'w') as file:
