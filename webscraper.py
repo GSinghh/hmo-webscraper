@@ -1,11 +1,13 @@
 import requests
 import json
+import os
 from bs4 import BeautifulSoup
 
 WEB_PAGE_URL = 'https://www.hmotorsonline.com/whats-new/'
 DIV_CLASS_NAME = 'flex_column av-ztsyz9-63e7b4b0ee123d3cd7f58c84edf84092 av_one_full avia-builder-el-18 el_after_av_one_full el_before_av_one_full first flex_column_div av-zero-column-padding column-top-margin'
 H3_CLASS_NAME = 'av-special-heading-tag'
 TITLE_CLASS_NAME = 'av-catalogue-title av-cart-update-title'
+FILE_NAME = 'dc_integra.json'
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -50,8 +52,7 @@ def get_parts_data():
             # print('Item Title: ', item_title)
             # print('Item Price: ', item_price)
             # print('Item Link: ', item_link)
-        store_data_in_file(parts, 'dc_integra.json')
-        
+        return parts        
         
 def store_data_in_file(data, filename):
     with open(filename, "w") as file:
@@ -60,16 +61,24 @@ def store_data_in_file(data, filename):
 def load_data_from_file(filename):
     with open(filename) as file:
         return json.load(file)
+    
+def identify_change(old_parts, new_parts):
+    if old_parts != new_parts:
+        pass
 
 
 if __name__ == 'main':
-    get_parts_data()
-
-
-
-# for result in results:
-#     print(result.text)
-
+    if not os.path.isfile(FILE_NAME):
+        parts = get_parts_data()
+        store_data_in_file(parts, FILE_NAME)
+    else:
+        new_parts = get_parts_data()
+        old_parts = load_data_from_file(FILE_NAME)
+        changes = identify_change(old_parts, new_parts)
+        if changes:
+            pass
+            # Do this if changes are found between the old and new file
+        
 # Use only when file is not formatted correctly
 """
 with open('page_data_formatted.html', 'w') as file:
