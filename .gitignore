@@ -2,3 +2,5 @@ myenv
 page_data_formatted.html
 page_data.html
 dc_integra.json
+.env
+hmo-scraper
