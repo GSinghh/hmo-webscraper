@@ -22,9 +22,9 @@ SMS_CARRIERS = {
 }
 
 
-def send_email(new_vehicles):
-    msg_sms = create_message(new_vehicles, PHONE_NUMBER, CARRIER)
-    msg_email = create_message(new_vehicles, EMAIL_ADDRESS, None)
+def send_email(new_parts):
+    msg_sms = create_message(new_parts, PHONE_NUMBER, CARRIER)
+    msg_email = create_message(new_parts, EMAIL_ADDRESS, None)
     with smtplib.SMTP(HOST, PORT_NUMBER) as smtp:
         smtp.ehlo()
         smtp.starttls()
@@ -37,7 +37,7 @@ def send_email(new_vehicles):
         smtp.close()
 
 
-def create_message(new_vehicles, recipient, carrier) -> EmailMessage:
+def create_message(new_parts, recipient, carrier) -> EmailMessage:
 
     msg = EmailMessage()
     msg["To"] = (
@@ -45,12 +45,16 @@ def create_message(new_vehicles, recipient, carrier) -> EmailMessage:
     )
     msg["From"] = EMAIL_ADDRESS
     msg["Subject"] = "New Parts for DC Integra!"
-    msg.set_content(format_content(new_vehicles))
+    msg.set_content(format_content(new_parts))
 
     return msg
 
 
-def format_content(new_vehicles):
-    msg_content = ""
-    
+def format_content(new_parts):
+    msg_content = ''
+    for i in range(len(new_parts)):
+        msg_content += f"Part: {new_parts[i]['Item Title']} \n"
+        msg_content += f"Price: {new_parts[i]['Item Price']} \n"
+        msg_content += f"Link: {new_parts[i]['Item Link']} \n"
+        
     return msg_content
