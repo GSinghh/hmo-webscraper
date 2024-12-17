@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+import send_sms
 from bs4 import BeautifulSoup
 
 WEB_PAGE_URL = 'https://www.hmotorsonline.com/whats-new/'
@@ -52,7 +53,7 @@ def get_parts_data():
             # print('Item Title: ', item_title)
             # print('Item Price: ', item_price)
             # print('Item Link: ', item_link)
-        return parts        
+    return parts        
         
 def store_data_in_file(data, filename):
     with open(filename, "w") as file:
@@ -79,6 +80,7 @@ else:
     changes = identify_change(old_parts, new_parts)
     if changes:
         store_data_in_file(new_parts, FILE_NAME)
+        send_sms.send_email(changes)
         # Do this if changes are found between the old and new file
     
 # Use only when file is not formatted correctly
